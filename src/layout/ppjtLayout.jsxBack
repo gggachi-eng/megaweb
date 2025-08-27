@@ -1,0 +1,28 @@
+// 파일: layout/pjtLayout.jsx
+import React, { useEffect, useState } from 'react';
+import { Outlet, useNavigate } from 'react-router-dom';
+import PjtSidebar from '../components/pjtSidebar';
+import { Box } from '@mui/material';
+
+export default function PjtLayout() {
+  const [menus, setMenus] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const storedMenus = localStorage.getItem('menus');
+    if (!storedMenus) {
+      navigate('/');
+    } else {
+      setMenus(JSON.parse(storedMenus));
+    }
+  }, []);
+
+  return (
+    <Box display="flex">
+      <PjtSidebar menus={menus} />
+      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <Outlet /> {/* 화면 본문 영역 */}
+      </Box>
+    </Box>
+  );
+}
